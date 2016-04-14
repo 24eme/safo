@@ -8,12 +8,6 @@ Produits
 
 ![Catalogue produit client](captures/catalogue_produit_client.png)
 
-![Visualisation produit](captures/visu_produit.png)
-
-Clients
-----------------------------
-
-![Selection client](captures/selection_client.png)
 
 Commandes
 --------------------------

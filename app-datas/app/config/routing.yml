@@ -1,0 +1,4 @@
+safo_datas:
+    resource: "@SafoDatasBundle/Resources/config/routing.yml"
+    prefix:   /
+

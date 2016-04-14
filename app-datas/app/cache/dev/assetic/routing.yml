@@ -1,0 +1,5 @@
+_assetic:
+    resource: .
+    type: assetic
+_app:
+    resource: /home/jb/public_html/safo/app-datas/app/config/routing_dev.yml

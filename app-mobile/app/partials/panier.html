@@ -1,0 +1,100 @@
+<h1>
+	<span>Panier</span>
+	<button ng-if="nbProduct > 0" class="btn btn-danger pull-right" ng-click="deleteCart()">Supprimer</button>
+	<button ng-if="nbProduct > 0" class="btn pull-right btn-poursuivre" ng-click="continueCart()">Poursuivre les achats</button>
+</h1>
+<div class="row page" id="page-panier">
+	<p ng-if="nbProduct == 0">/!\ Panier vide</p>
+	<table ng-if="nbProduct > 0" class="table">
+		<tr class="row">
+			<th class="col-sm-1"></th>
+			<th class="col-sm-4">Produit</th>
+			<th class="col-sm-1">PCB</th>
+			<th class="col-sm-2 text-center">Colis</th>
+			<th class="col-sm-1 text-center">Qté UC</th>
+			<th class="col-sm-1 text-center">Prix</th>
+			<th class="col-sm-1 text-center">Total</th>
+			<th class="col-sm-1"></th>
+		</tr>
+		<tr ng-repeat="produit in produits" class="row">
+			<td class="col-sm-1" style="vertical-align: middle;">
+				<div class="col-sm-12">
+					<div style="height: 50px; width: 50px; background: #f7f7f7; color: #dbdbdb; line-height: 55px; font-size: 25px; text-align: center" class="media-image pull-right">
+						<img ng-if="produit.image_petite_url" ng-src="{{ ::produit.image_petite_url }}" class="img-responsive" alt="Responsive image">
+			      	</div>
+		      	</div>
+			</td>
+			<td class="col-sm-4" style="vertical-align: middle;">
+				<h4 class="media-heading pull-left"><span>{{ produit.product.libelle | lowercase }}</span></h4>
+			</td>
+			<td class="col-sm-1" style="vertical-align: middle;">
+				{{ produit.product.pcb }}
+			</td>
+			<td class="col-sm-2" style="vertical-align: middle;">
+				<div class="col-sm-12" ng-init="qty=produit.quantity;">
+					<table class="table text-center" style="color:#e8e9eb; border:none; margin: 0;">
+						<tr>
+							<td class="col-sm-2" style="vertical-align: middle; border: none;">
+								<a href="" style="color:#8e9aa9;" ng-click="(qty > 0)? qty = qty - 1 : qty = qty;updateCart(produit.product, qty)"><i class="glyphicon glyphicon-minus-sign" style="font-size: 28px; top: 3px;"></i></a>
+							</td>
+							<td class="col-sm-8" style="vertical-align: middle; border: none;">
+								<input type="number" class="form-control" min="0" ng-model="qty" ng-change="updateCart(produit.product, qty)" />
+							</td>
+							<td class="col-sm-2" style="vertical-align: middle; border: none;">
+								<a href="" style="color:#8e9aa9;" ng-click="qty = qty + 1;updateCart(produit.product, qty)"><i class="glyphicon glyphicon-plus-sign" style="font-size: 28px; top: 3px;"></i></a>
+							</td>
+						</tr>
+					</table>
+	            </div>
+			</td>
+			<td class="col-sm-1 text-center" style="vertical-align: middle;">
+				{{ ((produit.product.pcb * parseFloat(produit.quantity))) }}
+			</td>
+			<td class="col-sm-1 text-center" style="vertical-align: middle;">
+				{{ produit.prix }} <span class="text-muted">€</span>
+			</td>
+			<td class="col-sm-1 text-center" style="vertical-align: middle;">
+				{{ ((parseFloat(produit.prix) * parseFloat(produit.quantity) * produit.product.pcb)) | number:2 }} <span class="text-muted">€</span>
+			</td>
+            <td class="col-sm-1 text-center" style="vertical-align: middle;">
+            	<a href="" ng-click="product(produit.product);" type="button" style="color: #8e9aa9;"><i class="glyphicon glyphicon-eye-open" style="font-size: 28px; top: 3px;"></i></a>&nbsp;&nbsp;&nbsp;<a href="" style="color:#8e9aa9;" ng-click="remove(produit.product._id);"><span style="font-size: 28px; top: 3px;" class="glyphicon glyphicon-remove-sign"></span></a>
+            </td>
+		</tr>
+		<tr class="row">
+			<td class="col-sm-1"></td>
+			<td class="col-sm-4"></td>
+			<td class="col-sm-1"></td>
+			<td class="col-sm-2"></td>
+			<td class="col-sm-1"></td>
+			<td class="col-sm-1 text-right"><strong>Total :</strong></td>
+			<td class="col-sm-1 text-center"><strong>{{ getTotal() | number:2 }} <span class="text-muted">€</span></strong></td>
+			<td class="col-sm-1"></td>
+		</tr>
+	</table>
+	
+</div>
+<div class="row">
+	<form id="cartForm" name="cartForm" class="form-horizontal col-sm-12" role="form" ng-if="nbProduct > 0">
+		<div class="form-group col-sm-10">
+			<label for="inputCommentaire" class="col-sm-12 control-label"><i class="glyphicon glyphicon-pencil"></i>&nbsp;Commentaires pour l'entrepôt</label>
+			<div class="col-sm-12">
+	      		<textarea class="form-control" rows="1" id="inputCommentaire" ng-model="cartForm.inputCommentaire"></textarea>
+	    	</div>
+		</div>
+		<div class="form-group col-sm-2">
+			<label for="inputDateLivraison" class="col-sm-12 control-label"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Date de livraison</label>
+			<div class="col-sm-12">
+	      		<input id="inputDateLivraison" type="date" class="form-control" ng-model="cartForm.inputDateLivraison" />
+	    	</div>
+		</div>
+		<div class="form-group col-sm-10">
+			<label for="inputNotes" class="col-sm-12 control-label"><i class="glyphicon glyphicon-pencil"></i>&nbsp;Commentaires Client / Commande</label>
+			<div class="col-sm-12">
+	      		<textarea class="form-control" rows="3" id="inputNotes" ng-model="cartForm.inputNotes"></textarea>
+	    	</div>
+		</div>
+		<div class="form-group col-sm-2" style="margin-top: 50px;">
+	    	<button class="btn btn-success col-sm-10 col-sm-offset-1" ng-click="confirm(cartForm)">Commander</button>
+	  	</div>
+	</form>
+</div>

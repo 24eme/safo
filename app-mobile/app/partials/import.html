@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-12">
+    <h3 class="text-muted"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{ user.name }}<button ng-click="admin = (!admin)" class="btn btn-lg btn-danger pull-right"><span class="glyphicon glyphicon-cog"></span></button></h3>
+    </div>
+    <div class="col-md-6">
+        <h3>Mise à jour des données</h3>
+        <div class="progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ synchroPourcentage }}" aria-valuemin="1" aria-valuemax="{{ 100 }}" style="width: {{ synchroPourcentage }}%">
+                <span ng-if="synchro">{{ synchroPourcentage }}%</span>
+                <span ng-if="!synchro && synchroPourcentage == 100">Terminé !</span>
+              </div>
+        </div>
+        <div ng-if="!synchro" class="btn-group" role="group">
+        <button  ng-click="pull();" class="btn btn-info">Mise à jour complète</button>
+        <button  ng-click="pullFast();" class="btn btn-default">Mise à jour rapide (promos, prix, stocks)</button>
+        </div>
+        <button ng-if="synchro" class="btn btn-info"><i class="fa fa-circle-o-notch fa-spin"></i></button>
+        <div style="margin-top: 20px;" ng-if="synchroErreur" class="alert alert-danger">
+            {{ synchroErreur }}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Envoi des commandes&nbsp;&nbsp;<span class="label label-danger">{{ nbCommandesAtt }}</span></h3>
+        <div class="progress">
+              <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="{{ synchroPushPourcentage }}" aria-valuemin="1" aria-valuemax="{{ 100 }}" style="width: {{ synchroPushPourcentage }}%">
+                <span ng-if="synchroPush">{{ synchroPushPourcentage }}%</span>
+                <span ng-if="!synchroPush && synchroPushPourcentage == 100">Terminé !</span>
+              </div>
+        </div>
+        <button ng-if="!synchroPush" ng-click="push();" class="btn btn-primary">Envoyer les commandes</button>
+        <button ng-if="synchroPush" class="btn btn-primary"><i class="fa fa-circle-o-notch fa-spin"></i></button>
+        <div style="margin-top: 20px;" ng-if="synchroPushErreur" class="alert alert-danger">
+            {{ synchroPushErreur }}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div ng-if="admin" class="col-md-12">
+        <h3>Base de données</h3>
+        <p>{{ nbDocs }} document(s)</p>
+        <p><button ng-if="!synchro" ng-click="deleteDatabase();" class="btn btn-danger">Réinitialiser les produits</button></p>
+        <p><button ng-if="!synchro" ng-click="deletePanier();" class="btn btn-danger">Réinitialiser le panier</button></p>
+        <p><button ng-if="!synchro" ng-click="deleteCommandes();" class="btn btn-danger">Réinitialiser les commandes</button></p>
+        <p><button ng-if="!synchro" ng-click="deleteUser();" class="btn btn-danger">Réinitialiser l'utilisateur</button></p>
+        </div>
+        </div>
+    </div>
+</div>

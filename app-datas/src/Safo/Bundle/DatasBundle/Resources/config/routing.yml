@@ -1,0 +1,3 @@
+safo_datas_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: SafoDatasBundle:Default:index }

@@ -1,0 +1,74 @@
+<div class="row">
+	<p ng-if="!orders.length">/!\ Commandes vide</p>
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+		<div class="panel panel-default" ng-repeat="commande in orders" style="margin: 0;">
+			<div class="panel-heading" style="cursor:pointer;" role="tab" id="heading-{{ commande.identifiant }}" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{ commande.identifiant }}" aria-expanded="false" aria-controls="collapse-{{ commande.identifiant }}">
+				<h4 class="panel-title">
+						{{ order.client }}
+						<br />
+						Commande n°{{ commande.identifiant }} du {{ commande.date | date:'dd/MM/yyyy HH:mm' }} - <span style="color: #23b1f7;">{{ commande.statut }}</span>
+				</h4>
+				<p style="padding-top: 8px;">
+					Livraison : {{ commande.date_livraison | date:'dd/MM/yyyy' }}
+					<br />
+					Commentaires pour l'entrepôt : {{ commande.commentaire }}
+					<br />
+					Commentaires Client / Commande : {{ commande.notes }}
+				</p>
+			</div>
+			<div id="collapse-{{ commande.identifiant }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ commande.identifiant }}">
+				<div class="panel-body">
+					
+					<table class="table">
+						<tr class="row">
+							<th class="col-sm-1"></th>
+							<th class="col-sm-6">Produit</th>
+							<th class="col-sm-1 text-center">PCB</th>
+							<th class="col-sm-1 text-center">Quantité</th>
+							<th class="col-sm-1 text-center">Prix</th>
+							<th class="col-sm-1 text-center">Total</th>
+						</tr>
+						<tr ng-repeat="produit in commande.produits" class="row">
+							<td class="col-sm-1" style="vertical-align: middle;">
+								<div class="col-sm-12">
+									<div style="height: 50px; width: 50px; background: #f7f7f7; color: #dbdbdb; line-height: 55px; font-size: 25px; text-align: center" class="media-image pull-right">
+										<img ng-if="produit.image_petite_url" ng-src="{{ ::produit.image_petite_url }}" class="img-responsive" alt="Responsive image">
+								      	<span ng-if="!produit.image_petite_url" class="glyphicon glyphicon-camera"></span>
+							      	</div>
+						      	</div>
+							</td>
+							<td class="col-sm-6" style="vertical-align: middle;">
+								<h4 class="media-heading pull-left"><span>{{ produit.libelle }}</span></h4>
+							</td>
+							<td class="col-sm-1 text-center" style="vertical-align: middle;">
+								{{ produit.pcb }}
+							</td>
+							<td class="col-sm-1 text-center" style="vertical-align: middle;">
+								{{ produit.quantity }}
+							</td>
+							<td class="col-sm-1 text-center" style="vertical-align: middle;">
+								{{ produit.prix }} <span class="text-muted">€</span>
+							</td>
+							<td class="col-sm-1 text-center" style="vertical-align: middle;">
+								{{ ((parseFloat(produit.prix) * parseFloat(produit.quantity) * produit.pcb)) | number:2 }} <span class="text-muted">€</span>
+							</td>
+						</tr>
+						<tr class="row">
+							<td class="col-sm-1"></td>
+							<td class="col-sm-6"></td>
+							<td class="col-sm-1"></td>
+							<td class="col-sm-1"></td>
+							<td class="col-sm-1 text-center"><strong>Total :</strong></td>
+							<td class="col-sm-1 text-center"><strong>{{ getTotal() | number:2 }} <span class="text-muted">€</span></strong></td>
+						</tr>
+					</table>
+					<button ng-if="commande.statut != 'ATTENTE' && !synchro" class="btn btn-danger pull-right" ng-click="resend(commande)">Resynchroniser</button>
+					<button ng-if="synchro" class="btn btn-info pull-right"><i class="fa fa-circle-o-notch fa-spin"></i></button>
+					<div style="margin-top: 20px;" ng-if="synchroErreur" class="alert alert-danger">
+			            {{ synchroErreur }}
+			        </div>
+				</div>
+		    </div>
+		</div>
+	</div>
+</div>

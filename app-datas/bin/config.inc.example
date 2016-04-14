@@ -1,0 +1,7 @@
+CLIENT_CSV_PATH=/home/path_project/safo-datas/datas/import/bk_cli000.csv
+ARTICLE_CSV_PATH=/home/path_project/safo-datas/datas/import/bk_art001.csv
+TARIF_CSV_PATH=/home/path_project/safo-datas/datas/import/bk_tar000.csv
+PROMO_CSV_PATH=/home/path_project/safo-datas/datas/import/bk_pro000.csv
+ASSORTIMENT_CSV_PATH=/home/path_project/safo-datas/datas/import/bk_ass000.csv
+URLIMAGE=http://url_image.com
+URLVIEWARTICLE=http://url_view.com

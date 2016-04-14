@@ -1,0 +1,7 @@
+parameters:
+#    safo_datas.example.class: Safo\Bundle\DatasBundle\Example
+
+services:
+#    safo_datas.example:
+#        class: %safo_datas.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

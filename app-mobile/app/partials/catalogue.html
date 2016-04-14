@@ -1,0 +1,176 @@
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group">
+				<div class="input-group">
+			      	<div ng-if="!query.recherche" class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+			      	<a href="" ng-click="query.recherche = null; update();" ng-if="query.recherche" class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></a>
+					<input id="input-search" class="form-control" ng-change="update();" ng-model-options="{debounce: 500}" ng-model="query.recherche" type="search" ng-minlength="3" placeholder="Rechercher un produit" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$('#input-search').keypress(function(e) {
+			if(e.which == 13) {
+        		$(this).blur();
+    		}
+		});
+	});
+	</script>
+    <div class="row">
+    	<div class="form-group col-lg-2 col-md-3 col-sm-4 col-xs-6">
+			<div ng-if="!query.departement">
+	    		<select class="form-control" ng-change="update()" ng-model="query.departement" placeholder="Departement" ng-options="dep as dep for dep in ::departements">
+	    		<option value="" selected disabled>Département</option>
+				</select>
+			</div>
+			<div ng-if="query.departement">
+				<div class="btn-group">
+				  <button type="button" ng-click="query.departement = null; update();"  class="btn btn-default">{{ query.departement }}&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+			</div>
+		</div>
+    	<div class="form-group col-lg-2 col-md-3 col-sm-4 col-xs-6">
+			<div ng-if="!query.rayon">
+	    		<select class="form-control" ng-change="update()" ng-model="query.rayon" placeholder="Rayon" ng-options="ray as ray for ray in ::rayons">
+	    		<option value="" selected disabled>Rayon</option>
+				</select>
+			</div>
+			<div ng-if="query.rayon">
+				<div class="btn-group">
+					<button type="button" ng-click="query.rayon = null; update();"  class="btn btn-default">{{ query.rayon }}&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+			</div>
+		</div>
+    	<div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-6">
+    		<div ng-if="!query.famille">
+	    		<select class="form-control" ng-change="update()" ng-model="query.famille" placeholder="Famille" ng-options="fam as fam for fam in ::familles">
+	    		<option value="" selected disabled>Famille</option>
+				</select>
+			</div>
+			<div ng-if="query.famille">
+				<div class="btn-group">
+					<button type="button" ng-click="query.famille = null; update();"  class="btn btn-default">{{ query.famille }}&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-6">
+			<div ng-if="!query.fournisseur">
+	    		<select class="form-control" ng-change="update()" ng-model="query.fournisseur" placeholder="Fournisseur" ng-options="fou as fou for fou in ::fournisseurs">
+	    		<option value="" selected disabled>Fournisseur</option>
+				</select>
+			</div>
+			<div ng-if="query.fournisseur">
+				<div class="btn-group">
+					<button type="button" ng-click="query.fournisseur = null; update();"  class="btn btn-default">{{ query.fournisseur }}&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-lg-2 col-md-3 col-sm-4 col-xs-6">
+			<div ng-if="!query.marque">
+	    		<select class="form-control" ng-change="update()" ng-model="query.marque" placeholder="Marque" ng-options="mar as mar for mar in ::marques">
+	    		<option value="" selected disabled>Marque</option>
+				</select>
+			</div>
+			<div ng-if="query.marque">
+				<div class="btn-group">
+			  		<button type="button" ng-click="query.marque = null; update();"  class="btn btn-default">{{ query.marque }}&nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+			</div>
+		</div>
+
+	    <div ng-if="client" class="btn-group col-xs-3" style="padding-bottom: 10px;">
+				<button type="button" ng-click="changeAssortiment(false);" class="btn" ng-class="{'active': !query.assortiment, 'btn-big-success': !query.assortiment, 'btn-big-default': query.assortiment }">Tous</button>
+				<button type="button" ng-click="changeAssortiment(true);" class="btn" ng-class="{'active': query.assortiment, 'btn-big-success': query.assortiment, 'btn-big-default': !query.assortiment  }">Assortiments</button>
+		</div>
+    </div>
+    
+    <div class="row page" style="padding-top: 10px; border-top: 1px solid #dddddd;">
+	    <div class="col-xs-12">
+		    <div class="row">
+				<div class="col-xs-12">
+					<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+					  <li ng-click="swipeRedirect('tous')" ng-class="{'active': !query.nouveautes && !query.promotions}"><a href="">Tous les produits&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge pull-right">{{ nbProduits }}</span></a></li>
+					  <li ng-class="{'active': !query.promotions}"><div class="navbar-tabs-separator">&nbsp;</div></li>
+					  <li ng-click="swipeRedirect('nouveautes')" ng-class="{'active': query.nouveautes }"><a href="">Nouveautés&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge pull-right">{{ nbProduitsNouveaute }}</span></a></li>
+					  <li ng-class="{'active': query.nouveautes || query.promotions }"><div class="navbar-tabs-separator">&nbsp;</div></li>
+					  <li ng-click="swipeRedirect('promotions')" ng-class="{'active': query.promotions }"><a href="">Promotions&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge pull-right">{{ nbProduitsPromo }}</span></a></li>
+					</ul>
+				</div>
+			</div>
+			<div infinite-scroll="loadMore()" infinite-scroll-distance="0">
+			
+				<div class="table-responsive">
+					<table class="table">
+						<tr ng-repeat="produit in produitsFiltered | limitTo: limit">
+							<td class="col-sm-1" style="border-top: 1px solid #e8e9eb;border-bottom: 1px solid #e8e9eb;border-left: 1px solid #e8e9eb;">
+								<div class="col-sm-12 text-center">
+									<div style="height: 100px; width: 100px; background: #f7f7f7; color: #dbdbdb; line-height: 110px; font-size: 50px; text-align: center" class="media-image">
+										<img ng-if="produit.image_petite_url" ng-src="{{ ::produit.image_petite_url }}" class="img-responsive" alt="Responsive image">
+								      	<span ng-if="!produit.image_petite_url" class="glyphicon glyphicon-camera"></span>
+							      	</div>
+						      	</div>
+							</td>
+							<td class="col-sm-9" style="border-top: 1px solid #e8e9eb;border-bottom: 1px solid #e8e9eb;">
+								<div class="row">
+									<div class="col-sm-12">
+							      		<h4 class="media-heading pull-left"><span>{{ ::produit.libelle | lowercase }}</span></h4>
+							      		<h6 class="media-heading pull-left"><span>{{ ::produit.marque | lowercase }}</span></h6>
+							      		<div class="pull-right etiquettes" style="margin-right: 15px;">
+							               <button type="button" class="btn btn-warning btn-xs" ng-if="produit.promotions">Promo</button>
+							               <button type="button" class="btn btn-danger btn-xs" ng-if="produit.nouveautes">Nouveauté</button>
+							               <button type="button" class="btn btn-success btn-xs" ng-if="client && !query.assortiment && produit.assortiment">Assortiment</button>
+							      		</div>
+							      	</div>
+							      	<div class="col-sm-5">
+						                <div>{{ ::produit.fournisseur }}</div>
+						                <div>{{ ::produit.rayon }}</div>
+						                <div>{{ ::produit.famille }}</div>
+						            </div>
+						            <div class="col-sm-2">
+						                <div><span class="text-muted">PCB :</span> {{ ::produit.pcb }}</div>
+						                <div><span class="text-muted">STOCK :</span> <span ng-if="stocks[produit._id].stock_co">{{ ::stocks[produit._id].stock_co }}</span><span ng-if="!stocks[produit._id].stock_co">0</span><i class="fa fa-circle bullet-stock"></i><span ng-if="stocks[produit._id].stock_uc">{{ ::stocks[produit._id].stock_uc }}</span><span ng-if="!stocks[produit._id].stock_uc">0</span></div>
+						            </div>
+									<div class="col-sm-2">
+									  	<div ng-if="client">
+									  		<span class="text-muted">P {{ ::client.tarif_id }} :</span>
+									  		<del ng-if="produit.prixOriginal != produit.prix">{{ ::produit.prixOriginal }}&nbsp;€</del>
+									  		<span>{{ ::produit.prix }}&nbsp;€</span>
+									  	</div>
+									</div>
+						          	<div class="col-sm-2">
+						              	<div ng-if="client"><span class="text-muted">PVC :</span> {{ ::produit.pvc }}&nbsp;€</div>
+						          	</div>
+								</div>
+							</td>
+							<td class="col-sm-2" style="vertical-align: middle; border-top: 1px solid #e8e9eb;border-bottom: 1px solid #e8e9eb;border-right: 1px solid #e8e9eb;">
+								<div class="row" style="border-left: 1px solid #e8e9eb;">
+								    <button ng-click="order(produit);" type="button" class="btn btn-sm btn-default col-sm-8 col-sm-offset-2" style="color: #8e9aa9; margin-bottom: 5px;"><i class="glyphicon glyphicon-eye-open" style="font-size: 18px; top: 4px;"></i>&nbsp;&nbsp;<span>Voir</span></button>
+									<div ng-if="client" class="col-sm-12" ng-init="qty=cartProducts[produit._id].quantity || 0">
+										<table class="table text-center" style="color:#8e9aa9; border:none; margin: 0;">
+											<tr>
+												<td class="col-sm-2" style="vertical-align: middle; border: none;">
+													<a href="" style="color:#8e9aa9;" ng-click="(qty > 0)? qty = qty - 1 : qty = qty;addToCart(produit, qty)"><i class="glyphicon glyphicon-minus-sign" style="font-size: 28px; top: 3px;"></i></a>
+												</td>
+												<td class="col-sm-8" style="vertical-align: middle; border: none;">
+													<input type="number" class="form-control" min="0" ng-model="qty" ng-change="addToCart(produit, qty)" />
+												</td>
+												<td class="col-sm-2" style="vertical-align: middle; border: none;">
+													<a href="" style="color:#8e9aa9;" ng-click="qty = qty + 1;addToCart(produit, qty)"><i class="glyphicon glyphicon-plus-sign" style="font-size: 28px; top: 3px;"></i></a>
+												</td>
+											</tr>
+										</table>
+						            </div>
+					            </div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div ng-if="limit < produitsFiltered.length" class="col-xs-12">
+        <p class="text-center"><i class="fa fa-circle-o-notch fa-spin text-primary"></i>&nbsp;&nbsp;Chargement en cours...</p>
+    </div>

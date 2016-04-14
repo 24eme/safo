@@ -1,0 +1,5 @@
+doctrine_couch_db:
+  client:
+    dbname: safo-datas
+  odm:
+    auto_mapping: true

@@ -1,0 +1,24 @@
+'use strict';
+
+angular.module('safoAppMobile.config', [])
+    .factory('SafoConfig', [function() {
+        var config = {
+            db: {
+                name: 'safo-datas',
+                adapter: 'websql',
+                remote_url: '',
+                order: {
+                    name: 'orders',
+                    adapter: 'websql',
+                    remote_url: '',
+                },
+                user: {
+                    name: 'user',
+                    adapter: 'websql'
+                }
+            }
+        }; 
+
+        return config;
+    }])
+    ;

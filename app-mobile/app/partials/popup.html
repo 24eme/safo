@@ -1,0 +1,81 @@
+ <form role="form" id="fiche-produit" ng-init="showDetails = false">
+        <div class="modal-header">
+        	<div class="row">
+        		<div class="col-sm-10">
+	            	<h4 class="media-heading pull-left"><span>{{ ::produit.libelle | lowercase }}</span></h4>
+			        <span class="etiquettes">
+			            <button type="button" class="btn btn-warning btn-xs" ng-if="produit.promotions">Promo</button>
+						<button type="button" class="btn btn-danger btn-xs" ng-if="produit.nouveautes">Nouveauté</button>
+					</span>
+				</div>
+				<div class="col-sm-2">
+					<div class="pull-right btn-fermer">
+						<a href="" ng-click="cancel()">Fermer&nbsp;<i class="glyphicon glyphicon-remove"></i></a>
+					</div>
+				</div>
+			</div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+            	<div class="col-sm-4">
+	                <div ng-if="!produit.image_normale_url" style="height: 300px; background: #f7f7f7; color: #dbdbdb; line-height: 330px; font-size: 150px; text-align: center">
+						<span class="glyphicon glyphicon-camera"></span>
+	                </div>  
+	                <div ng-if="produit.image_normale_url" style="height: 300px; background: #fff;">
+	                    <img style="width: 100%;" ng-src="{{ ::produit.image_normale_url }}" />
+	                </div>  
+                </div>
+                <div class="col-sm-8 btn-groupe">
+                	<button type="button" class="btn btn-price pull-right" ng-click="showDetails = ! showDetails"><i class="glyphicon glyphicon-euro"></i></button>
+                </div>
+                <div class="col-sm-4">
+                   <div class="panel panel-default">
+                        <div class="panel-heading">Description</div>
+                        <ul class="list-group">
+                            <li class="list-group-item">EAN13 : {{ produit.ean13 }}</li>
+                            <li ng-if="produit.marque" class="list-group-item">{{ produit.marque }}</li>
+                            <li class="list-group-item">{{ produit.fournisseur }}</li>
+                            <li class="list-group-item">{{ produit.rayon }}</li>
+                            <li class="list-group-item">{{ produit.famille }}</li>
+                        </ul>
+                    </div>
+               </div>
+              	<div class="col-sm-4">
+                   <div class="panel panel-default" ng-class="{ 'hidden': ! showDetails }">
+                        <div class="panel-heading">Prix</div>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="(tarif_id, tarif) in tarifs[produit._id]"><span>P {{ tarif_id }} :</span> <strong>{{tarif.prix }}&nbsp;€</strong> / <span>PVC</span> : <strong>{{tarif.pvc }}&nbsp;€</strong></li>
+                        </ul>
+                    </div>
+               	</div>
+       		</div>
+       		<div class="row">
+               <div class="col-sm-4">
+                   <div class="panel panel-default">
+                      <div class="panel-heading">Informations</div>
+                      <ul class="list-group">
+                        <li class="list-group-item">PCB : {{ produit.pcb }}</li>
+                        <li class="list-group-item">STOCK : <span ng-if="stocks[produit._id].stock_co">{{ stocks[produit._id].stock_co }}</span><span ng-if="!stocks[produit._id].stock_co">0</span>&nbsp;.&nbsp;<span ng-if="stocks[produit._id].stock_uc">{{ stocks[produit._id].stock_uc }}</span><span ng-if="!stocks[produit._id].stock_uc">0</span></li>
+                        <li class="list-group-item">POIDS NET : {{ produit.poids_net }}</li>
+                      </ul>
+                   </div>
+               </div>
+               <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Assortiments</div>
+                        <div class="panel-body">
+                            <span ng-repeat="ass in produit.assortiments">{{ ass }} </span>
+                        </div>
+                    </div>
+               </div>
+               <div class="col-sm-4">
+                   <div class="panel panel-default" ng-class="{ 'hidden': ! showDetails }">
+                        <div class="panel-heading">Promotions</div>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="(promo_id, prix) in promos[produit._id]"><span>{{ promo_id }} :</span> <strong>{{ prix }}&nbsp;€</strong></li>
+                        </ul>
+                    </div>
+               </div>
+            </div>
+        </div>
+</form>

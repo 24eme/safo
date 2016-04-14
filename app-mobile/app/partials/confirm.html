@@ -1,0 +1,24 @@
+ <form role="form" id="confirm" ng-init="showDetails = false">
+        <div class="modal-header">
+        	<div class="row">
+				<div class="col-sm-12">
+					<div class="pull-right btn-fermer">
+						<a href=""  ng-click="cancel()"><i class="glyphicon glyphicon-remove"></i></a>
+					</div>
+				</div>
+        		<div class="col-sm-12">
+	            	<h4 class="media-heading col-sm-12"><span>VALIDATION DE LA COMMANDE</span></h4>
+				</div>
+			</div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <p>Vous êtes sur le point de valider votre commande.</p>
+                <p><strong>Souhaitez-vous continuer ?</strong></p>
+       		</div>
+       		<div class="row" style="margin-top: 20px;">
+       			<button class="btn btn-poursuivre col-sm-3" ng-click="cancel()">Retourner à ma commande</button>
+				<button class="btn btn-success col-sm-3" ng-click="order(cartForm)">Valider ma commande</button>
+            </div>
+        </div>
+</form>

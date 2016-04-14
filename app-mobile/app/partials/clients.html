@@ -1,0 +1,48 @@
+<div class="form-group">
+    <div class="input-group">
+        <div ng-if="!query.recherche" class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+        <a href="" ng-click="query.recherche = null; update();" ng-if="query.recherche" class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></a>
+        <input id="input-search" class="form-control" ng-change="update();" ng-model-options="{debounce: 500}" ng-model="query.recherche" type="search" ng-minlength="2" placeholder="Rechercher un client" />
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#input-search').keypress(function(e) {
+            if(e.which == 13) {
+                $(this).blur();
+            }
+        });
+    });
+</script>
+<div class="row page" style="padding-top: 10px; border-top: 1px solid #dddddd;">
+    <div class="col-xs-12" infinite-scroll="loadMore()" infinite-scroll-distance="0">
+    	<div class="table-responsive">
+			<table class="table">
+				<tr ng-repeat="client in clientsFiltered = (clients | filter: query.recherche ) | limitTo: limit">
+					<td class="col-sm-10" style="border-top: 1px solid #e8e9eb;border-bottom: 1px solid #e8e9eb;border-left: 1px solid #e8e9eb;">
+						<div class="row">
+							<div class="col-sm-12">
+					      		<h4 class="media-heading pull-left"><span>{{ ::client.libelle | lowercase }}</span></h4>
+					      		<h6 class="media-heading pull-left"><span>{{ ::client.code_postal }} {{ ::client.ville | lowercase }}</span></h6>
+					      	</div>
+					      	<div class="col-sm-6">
+				                <div>{{ ::client.enseigne }}</div>
+				                <div>{{ ::client.categorie }}</div>
+				            </div>
+				            <div class="col-sm-6">
+				                <div ng-if="client.assortiment_id"><span class="text-muted">Assortiment :</span> {{ ::client.assortiment_id }}</div>
+				                <div ng-if="!client.assortiment_id"><span class="text-muted">Assortiment :</span> <span class="text-danger">Aucun</span></div>
+				                <div><span class="text-muted">Prix :</span> {{  ::client.tarif_id }}</div>
+				            </div>
+						</div>
+					</td>
+					<td class="col-sm-2" style="vertical-align: middle; border-top: 1px solid #e8e9eb;border-bottom: 1px solid #e8e9eb;border-right: 1px solid #e8e9eb;">
+						<div class="row" style="border-left: 1px solid #e8e9eb;">
+						    <button ng-click="chooseClient(client);" type="button" class="btn btn-sm btn-default col-sm-8 col-md-offset-2" style="color: #8e9aa9; margin-bottom: 5px;"><i class="glyphicon glyphicon-user" style="font-size: 18px; top: 4px;"></i>&nbsp;<span>Choisir</span></button>
+			            </div>
+					</td>
+				</tr>
+			</table>
+		</div>
+    </div>
+</div>
